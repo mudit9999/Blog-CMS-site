@@ -17,6 +17,7 @@ class PostsController extends Controller
      */
     public function index()
     {
+         return view('admin.posts.index')->with('posts',Post::all());
         //
     }
 
@@ -27,8 +28,18 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create')->with('categories',Category::all());
+        $categories = Category::all();
+
+        if($categories->count()==0)
+        {
+            Session::flash('info','You must have some Category');
+            return redirect()->back();
+
+        }
+
+        return view('admin.posts.create')->with('categories',$categories);
         //
+
     }
 
     /**
@@ -50,20 +61,21 @@ class PostsController extends Controller
 
         $featured_new_name = time().$featured->getClientOriginalName();
 
-        $featured->move('/uploads/posts',$featured_new_name);
+        $featured->move('uploads/posts',$featured_new_name);
 
         $post = Post::create([
 
             'title'   => $request->title,
             'content' => $request['content'],
-            'featured'=> 'uploads/posts'.$featured_new_name,
-            'category_id'=>$request->category_id
+            'featured'=> 'uploads/posts/'.$featured_new_name,
+            'category_id'=>$request->category_id,
+            'slug' => str_slug($request->title)
 
 
         ]);
 
 
-        Session::flash('success','Post created Succesfully.');
+        Session::flash('success','Post created Successfully.');
 
         return redirect('post/create');
 
@@ -89,6 +101,10 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
+        $post = Post::find($id);
+
+        return view('admin.posts.edit')->with('post',$post)->with('categories',Category::all());
+
         //
     }
 
@@ -101,6 +117,38 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+
+        $this->validate($request,[
+
+            'title' => 'required',
+            'content'=>'required',
+            'category_id'=>'required'
+
+        ]);
+        $post = Post::find($id);
+
+        if($request->hasfile('featured'))
+        {
+            $featured = $request->featured;
+
+            $featured_new_name=time().$featured->getClientOriginalName();
+
+            $featured->move('uploads/posts',$featured_new_name);
+
+            $post->featured = 'uploads/posts/'.$featured_new_name;
+
+        }
+
+
+        $post->title = $request->title;
+        $post->content =$request->content;
+        $post->category_id =$request->category_id;
+
+        $post->save();
+
+        Session::flash('success','Post is Updated Successfully');
+        return redirect()->route('posts');
         //
     }
 
@@ -112,6 +160,49 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
+        $post = Post::find($id);
+        $post->delete();
+
+        Session::flash('success','The post was just trashed');
+
+
+        return redirect()->back();
         //
     }
+    public function trashed()
+    {
+
+         $posts = Post::onlyTrashed()->get();
+
+         return view('admin.posts.trashed')->with('posts',$posts);
+    }
+
+    public function kill($id)
+    {
+       $post = Post::withTrashed()->where('id', $id)->first();
+
+       $post->forceDelete();
+
+       Session::flash('success','Post Deleted Successfully');
+
+       return redirect()->back();
+    }
+
+    public function restore($id)
+    {
+        $post = Post::withTrashed()->where('id',$id)->first();
+
+        $post->restore();
+
+        Session::flash('success','Post is successfully Restored');
+
+        return redirect()->route('posts');
+
+
+    }
+
 }
+
+
+
+

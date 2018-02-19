@@ -50,7 +50,7 @@ class CategoriesController extends Controller
 
         Session::flash('success','You have created a Category');
 
-        return redirect()->back();
+        return redirect('/categories');
 
         //dd($request->all());
         //

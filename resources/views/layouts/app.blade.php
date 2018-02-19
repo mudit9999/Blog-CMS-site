@@ -98,6 +98,12 @@
                             <a href="{{ route('categories') }}">Categories</a>
                         </li>
                         <li class="list-group-item">
+                            <a href="{{ route('posts') }}">All Posts</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('posts.trashed') }}">Trashed Post</a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="{{ route('post.create') }}">Create New Post</a>
                         </li>
 
@@ -124,22 +130,28 @@
 
 
     <!-- Scripts -->
-    {{--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>--}}
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
    <script src="js/app.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js">
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js">
 
-    </script>
-    <script src="{{ asset('/js/toastr.min.js') }}"></script>
-   <script>toastr
+       </script>
+    <script src="{{ asset('js/toastr.min.js') }}"></script>
+   <script>
 
-       @@if(Session::has('success'))
+       @if(Session::has('success'))
 
-               console.log('heloo');
-          toastr.success("{{ Session::get('success') }} jdsnvkd")
+          toastr.success("{{ Session::get('success') }}")
 
-       @@endif
+       @endif
+
+       @if(Session::has('info'))
+
+       {{--window.alert("{{ Session::get('info') }}");--}}
+       toastr.info("{{ Session::get('info') }}")
+
+       @endif
    </script>
 </body>
 </html>
