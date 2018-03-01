@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -37,7 +38,8 @@ class PostsController extends Controller
 
         }
 
-        return view('admin.posts.create')->with('categories',$categories);
+        return view('admin.posts.create')->with('categories',$categories)
+                                              ->with('tags',Tag::all());
         //
 
     }
@@ -51,11 +53,13 @@ class PostsController extends Controller
     public function store(Request $request)
     {
 
+
         $this->validate($request,[
             'title'   =>'required|max:255',
             'featured'=>'required|image|mimes:jpeg,png,jpg,svg',
             'content' =>'required',
-            'category_id' =>'required'
+            'category_id' =>'required',
+            'tags'=>'required'
         ]);
         $featured = $request->featured;
 
@@ -73,6 +77,8 @@ class PostsController extends Controller
 
 
         ]);
+
+        $post->tags()->attach($request->tags);
 
 
         Session::flash('success','Post created Successfully.');
@@ -103,7 +109,9 @@ class PostsController extends Controller
     {
         $post = Post::find($id);
 
-        return view('admin.posts.edit')->with('post',$post)->with('categories',Category::all());
+        return view('admin.posts.edit')->with('post',$post)
+                                            ->with('categories',Category::all())
+                                            ->with('tags',Tag::all());
 
         //
     }
@@ -142,10 +150,12 @@ class PostsController extends Controller
 
 
         $post->title = $request->title;
-        $post->content =$request->content;
+        $post->content = $request->content;
         $post->category_id =$request->category_id;
 
         $post->save();
+
+        $post->tags()->sync($request->tags);
 
         Session::flash('success','Post is Updated Successfully');
         return redirect()->route('posts');

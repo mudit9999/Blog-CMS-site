@@ -26,4 +26,13 @@ class Post extends Model
 
     protected $fillable =['title','content','category_id','featured','slug'];
     //
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
+
 }
+
+
+
+

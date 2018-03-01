@@ -38,7 +38,16 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="content">Title</label>
+                    <label for="tags">Select Tags</label>
+                  @foreach($tags as $tag)
+                    <div class="checkbox">
+                       <label><input type="checkbox" name="tags[]" value="{{ $tag->id }}">{{ $tag->tag }}</label>
+                    </div>
+                  @endforeach
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Content</label>
                     <textarea name="content" id="content" cols="5" rows="5" class="form-control"></textarea>
                 </div>
                 <div class="form-group">
@@ -53,3 +62,18 @@
     </div>
 
 @stop
+
+@section('Styles')
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+
+ @stop
+
+@section('Scripts')
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#content').summernote();
+        });
+    </script>
+ @stop

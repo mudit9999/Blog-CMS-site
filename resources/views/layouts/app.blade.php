@@ -19,7 +19,7 @@
     <link href="css/app.css" rel="stylesheet">
     <link href="{{ asset('/css/toastr.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.css">
-
+    @yield('Styles')
     <!-- Scripts -->
     <script>
         window.Laravel = <?php echo json_encode([
@@ -95,7 +95,19 @@
                             <a href="/blog/public/home">Home</a>
                         </li>
                         <li class="list-group-item">
+                            <a href="{{ route('users') }}">Users</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('users.create') }}">Create New User</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('user.profile') }}">My Profile</a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="{{ route('categories') }}">Categories</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('tags') }}">Tags</a>
                         </li>
                         <li class="list-group-item">
                             <a href="{{ route('posts') }}">All Posts</a>
@@ -109,6 +121,9 @@
 
                         <li class="list-group-item">
                             <a href="{{ route('category.create') }}">Create new Category</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('tag.create') }}">Create New Tag</a>
                         </li>
                     </ul>
                 </div>
@@ -153,5 +168,6 @@
 
        @endif
    </script>
+      @yield('Scripts')
 </body>
 </html>

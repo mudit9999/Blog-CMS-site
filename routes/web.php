@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/test', function (){
+    return App\User::find(1)->profile;
+});
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -116,6 +120,83 @@ Route::group(['middleware' => 'auth'],function (){
 
         'uses'=>'CategoriesController@update',
         'as'  =>'category.update'
+    ]);
+
+    Route::get('/tags',[
+        'uses'=>'TagsController@index',
+        'as'=>'tags'
+
+    ]);
+
+    Route::get('/tag/edit/{id}',[
+        'uses'=>'TagsController@edit',
+        'as'=>'tag.edit'
+
+    ]);
+    Route::post('/tag/update/{id}',[
+        'uses'=>'TagsController@update',
+        'as'=>'tag.update'
+
+    ]);
+    Route::get('/tag/delete/{id}',[
+        'uses'=>'TagsController@destroy',
+        'as'=>'tag.delete'
+
+    ]);
+    Route::get('/tag/create',[
+        'uses'=>'TagsController@create',
+        'as'=>'tag.create'
+
+    ]);
+    Route::post('/tag/store',[
+        'uses'=>'TagsController@store',
+        'as'=>'tag.store'
+    ]);
+
+    Route::get('/users',[
+        'uses'=>'UsersController@index',
+        'as' =>'users'
+
+    ]);
+
+    Route::get('/users/create',[
+        'uses'=>'UsersController@create',
+        'as' =>'users.create'
+
+    ]);
+
+    Route::post('/users/store',[
+        'uses'=>'UsersController@store',
+        'as' =>'user.store'
+
+    ]);
+
+    Route::get('/users/admin/{id}',[
+        'uses'=>'UsersController@admin',
+        'as' =>'user.admin'
+
+    ])->middleware('admin');
+
+    Route::get('user/delete/{id}',[
+        'uses'=>'UsersController@destroy',
+        'as'=>'user.delete'
+
+    ]);
+
+    Route::get('/users/not-admin/{id}',[
+        'uses'=>'UsersController@not_admin',
+        'as' =>'user.not_admin'
+
+    ]);
+    Route::get('/users/profile',[
+       'uses'=>'ProfilesController@index',
+       'as'=>'user.profile'
+
+    ]);
+    Route::get('/users/profile/update',[
+        'uses'=>'ProfilesController@update',
+        'as'=>'user.profile.update'
+
     ]);
 
 
